@@ -1,0 +1,14 @@
+<setup>
+    <block title=" " endpoint="TA-Cb_Response_input_setup/TA-Cb_Response_settings" entity="TA-Cb_Response_settings">
+        <input field="all_settings">
+            <label> </label>
+            <type>text</type>
+        </input>
+        <text>
+            <![CDATA[
+                <script type="text/javascript" src="/en-US/static/app/TA-Cb_Response/js/setup.js"></script>
+                <script type="text/javascript" src="/en-US/static/app/TA-Cb_Response/js/setup_page.js"></script>
+            ]]>
+        </text>
+    </block>
+</setup>

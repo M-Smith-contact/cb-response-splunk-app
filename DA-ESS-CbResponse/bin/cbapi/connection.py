@@ -5,7 +5,15 @@ from __future__ import absolute_import
 import requests
 import sys
 from requests.adapters import HTTPAdapter
-from requests.packages.urllib3 import Retry
+
+# Older versions of requests (such as the one packaged with Splunk) do not have a Retry object
+# in the packaged version of urllib3. Fall back gracefully.
+try:
+    from requests.packages.urllib3 import Retry
+    MAX_RETRIES = Retry(total=5, status_forcelist=[502, 504], backoff_factor=0.5)
+except ImportError:
+    MAX_RETRIES = 5
+
 from requests.packages.urllib3.poolmanager import PoolManager
 import logging
 import json
@@ -86,7 +94,7 @@ class Connection(object):
             self.session.mount(self.server, HostNameIgnoringAdapter())
 
         # TODO: apply this to the ssl_verify_hostname case as well
-        self.session.mount(self.server, HTTPAdapter(max_retries=Retry(total=5, status_forcelist=[502, 504], backoff_factor=0.5)))
+        self.session.mount(self.server, HTTPAdapter(max_retries=MAX_RETRIES))
 
         self.proxies = {}
         if credentials.ignore_system_proxy:         # see https://github.com/kennethreitz/requests/issues/879

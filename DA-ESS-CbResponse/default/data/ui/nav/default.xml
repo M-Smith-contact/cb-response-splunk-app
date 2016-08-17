@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nav color="#43434A">
-    <view name="home" default="true" label="Home" />
-
     <collection label="Carbon Black Enterprise Response">
         <view name="overview" default='true'/>
         <view name="carbonblack-binary" default='false'/>

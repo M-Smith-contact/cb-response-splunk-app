@@ -1,7 +1,7 @@
 $(document).ready(function() {
     // 0) global vars
     // FIXME for the ebox_id, it will be different from TA to TA.
-    var allSettingsEboxId = "#\\/TA-Cb_Response_input_setup\\/TA-Cb_Response_settings\\/TA-Cb_Response_settings\\/all_settings_id";
+    var allSettingsEboxId = "#\\/DA-ESS-CbResponse_input_setup\\/DA-ESS-CbResponse_settings\\/DA-ESS-CbResponse_settings\\/all_settings_id";
 
     var appname = Splunk.util.getCurrentApp();
     // 1) Load dependent css and javascript

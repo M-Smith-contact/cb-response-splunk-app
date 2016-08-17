@@ -17,8 +17,9 @@ $(APPNAME).spl:
 	cp -r $(APPNAME)/static build/$(APPNAME)
 	cp LICENSE.md build/$(APPNAME)
 	cp README.md build/$(APPNAME)
+	mkdir build/$(APPNAME)/local
 
 	find build/$(APPNAME) -name ".*" -delete
 	find build/$(APPNAME) -name "*.pyc" -delete
 
-	tar -cvzf build/$(APPNAME).spl build/$(APPNAME)
+	(cd build && COPYFILE_DISABLE=1 tar -cvzf $(APPNAME).spl $(APPNAME))

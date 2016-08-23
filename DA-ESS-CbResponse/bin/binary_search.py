@@ -1,10 +1,16 @@
-from cbapi import CbApi
+from cbhelpers import get_cbapi
+from cbapi.errors import ApiError
+from cbapi.response import Binary
+
 import sys
 from splunklib.searchcommands import dispatch, GeneratingCommand, Configuration, Option
 import time
 
+import json
+
 import logging
 log = logging.getLogger(__name__)
+
 
 @Configuration()
 class BinarySearchCommand(GeneratingCommand):
@@ -21,34 +27,34 @@ class BinarySearchCommand(GeneratingCommand):
         self.setup_complete = False
         self.cb = None
 
-    def prepare(self):
-        splunk = self.service
-        try:
-            api_credentials = splunk.storage_passwords["DA-ESS-CbResponse:apikey"]
-            token = api_credentials.clear_password.split("``splunk_cred_sep``")[1]
+    def error_event(self, comment):
+        error_text = {"Error": comment}
 
-            self.cb_server = splunk.confs["DA-ESS-CbResponse_customized"]["cburl"].content['content']
+        return {'sourcetype': 'bit9:carbonblack:json', '_time': time.time(), 'source': self.cb.credentials.url,
+                '_raw': json.dumps(error_text)}
+
+    def prepare(self):
+        try:
+            self.cb = get_cbapi(self.service)
         except KeyError:
             log.exception("API key not set")
+        except ApiError:
+            log.exception("Could not contact Cb Response server")
         except Exception:
             log.exception("Error reading API key from credential storage")
         else:
-            self.cb = CbApi(self.cb_server, token=token, ssl_verify=False)
             self.setup_complete = True
 
     def generate(self):
-        for bindata in self.cb.binary_search_iter(self.query):
-            self.logger.info("yielding binary %s" % bindata["md5"])
-            rawdata = dict((field_name, bindata.get(field_name, "")) for field_name in self.field_names)
         try:
-            rawdata
-            synthevent = {'sourcetype': 'bit9:carbonblack:json', '_time': time.time(), 'source': self.cb_server,
-                          '_raw': rawdata}
-            yield synthevent
-        except Exception:
-            synthevent = {'sourcetype': 'bit9:carbonblack:json', '_time': time.time(), 'source': self.cb_server,
-                          '_raw': '{"Error":"MD5 not found"}'}
-            yield synthevent
+            for bindata in self.cb.select(Binary).where(self.query):
+                self.logger.info("yielding binary %s" % bindata.md5)
+                rawdata = dict((field_name, getattr(bindata, field_name, "")) for field_name in self.field_names)
+                yield {'sourcetype': 'bit9:carbonblack:json', '_time': time.time(), 'source': self.cb.credentials.url,
+                       '_raw': rawdata}
+
+        except Exception as e:
+            yield self.error_event("error searching for {0} in Cb Response: {1}".format(self.query, str(e)))
 
 
 if __name__ == '__main__':

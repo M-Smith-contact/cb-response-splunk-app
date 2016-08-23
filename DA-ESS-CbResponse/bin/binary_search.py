@@ -37,11 +37,11 @@ class BinarySearchCommand(GeneratingCommand):
         try:
             self.cb = get_cbapi(self.service)
         except KeyError:
-            log.exception("API key not set")
+            self.logger.exception("API key not set")
         except ApiError:
-            log.exception("Could not contact Cb Response server")
+            self.logger.exception("Could not contact Cb Response server")
         except Exception:
-            log.exception("Error reading API key from credential storage")
+            self.logger.exception("Error reading API key from credential storage")
         else:
             self.setup_complete = True
 

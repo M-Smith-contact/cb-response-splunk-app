@@ -23,7 +23,7 @@
             <!-- 3 elements are grouped into the left column -->
             <single>
                 <search>
-                    <query>| savedsearch "CBER - Alert Activity" | stats count</query>
+                    <query>| savedsearch "CbResponse Alert Activity" | stats count</query>
                     <earliest>$timeframe.earliest$</earliest>
                     <latest>$timeframe.latest$</latest>
                 </search>
@@ -45,7 +45,7 @@
             </single>
             <single>
                 <search>
-                    <query>| tstats count from datamodel=Carbon_Black.CB_Alerts</query>
+                    <query>| tstats count from datamodel=CbResponse.CB_Alerts</query>
                     <earliest>$timeframe.earliest$</earliest>
                     <latest>$timeframe.latest$</latest>
                 </search>
@@ -67,7 +67,7 @@
             </single>
             <single>
                 <search>
-                    <query>| tstats count from datamodel=Carbon_Black.CB_Alerts where CB_Alerts.feed_name="cbbanning"
+                    <query>| tstats count from datamodel=CbResponse.CB_Alerts where CB_Alerts.feed_name="cbbanning"
                     </query>
                     <earliest>$timeframe.earliest$</earliest>
                     <latest>$timeframe.latest$</latest>
@@ -85,7 +85,7 @@
             </single>
             <single>
                 <search>
-                    <query>| tstats count from datamodel=Carbon_Black.CB_Alerts by CB_Alerts.cb_server
+                    <query>| tstats count from datamodel=CbResponse.CB_Alerts by CB_Alerts.cb_server
                         | stats count(CB_Alerts.cb_server)
                     </query>
                     <earliest>$timeframe.earliest$</earliest>
@@ -108,7 +108,7 @@
         <chart>
             <title>Watchlist Events</title>
             <search>
-                <query>| tstats count from datamodel=Carbon_Black.CB_Alerts by CB_Alerts.watchlist_name | rename
+                <query>| tstats count from datamodel=CbResponse.CB_Alerts by CB_Alerts.watchlist_name | rename
                     CB_Alerts.watchlist_name as alert | where count&gt;1
                 </query>
                 <earliest>$timeframe.earliest$</earliest>
@@ -142,7 +142,7 @@
         <chart>
             <title>Feed Events</title>
             <search>
-                <query>| tstats count from datamodel=Carbon_Black.CB_Alerts by CB_Alerts.feed_name | rename
+                <query>| tstats count from datamodel=CbResponse.CB_Alerts by CB_Alerts.feed_name | rename
                     CB_Alerts.feed_name as alert
                 </query>
                 <earliest>$timeframe.earliest$</earliest>

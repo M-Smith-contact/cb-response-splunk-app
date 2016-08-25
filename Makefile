@@ -7,18 +7,18 @@ clean:
 	rm -f build/$(APPNAME).spl
 	rm -rf build/$(APPNAME)
 
-$(APPNAME).spl: clean
-	mkdir build/$(APPNAME)
+$(APPNAME).spl:
+	mkdir -p build/$(APPNAME)
 
 	cp -r $(APPNAME)/appserver build/$(APPNAME)
 	cp -r $(APPNAME)/bin build/$(APPNAME)
 	cp -r $(APPNAME)/default build/$(APPNAME)
 	cp -r $(APPNAME)/metadata build/$(APPNAME)
 	cp -r $(APPNAME)/static build/$(APPNAME)
-	cp -r $(APPNAME)/samples build/$(APPNAME)
 	cp LICENSE.md build/$(APPNAME)
 	cp README.md build/$(APPNAME)
-	mkdir build/$(APPNAME)/local
+	rm -rf build/$(APPNAME)/local
+	mkdir -p build/$(APPNAME)/local
 
 	find build/$(APPNAME) -name ".*" -delete
 	find build/$(APPNAME) -name "*.pyc" -delete

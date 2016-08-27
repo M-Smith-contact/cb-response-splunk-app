@@ -45,11 +45,11 @@
             </single>
             <single>
                 <search>
-                    <query>| tstats count from datamodel=CbResponse.CB_Alerts</query>
+                    <query>| savedsearch "CbResponse New Binaries" | stats count</query>
                     <earliest>$timeframe.earliest$</earliest>
                     <latest>$timeframe.latest$</latest>
                 </search>
-                <option name="underLabel">alerts triggered</option>
+                <option name="underLabel">new binaries observed</option>
                 <option name="field">count</option>
                 <option name="colorBy">value</option>
                 <option name="colorMode">none</option>
@@ -65,9 +65,27 @@
                 <option name="rangeValues">[0,50,150]</option>
                 <option name="trendInterval">auto</option>
             </single>
+            <!--<single>-->
+                <!--<search>-->
+                    <!--<query>| type=binaryinfo.host.observed | fields hostname | top hostname-->
+                    <!--</query>-->
+                    <!--<earliest>$timeframe.earliest$</earliest>-->
+                    <!--<latest>$timeframe.latest$</latest>-->
+                <!--</search>-->
+                <!--<option name="underLabel">banned hashes executed</option>-->
+                <!--<option name="field">count</option>-->
+                <!--<option name="colorBy">value</option>-->
+                <!--<option name="colorMode">none</option>-->
+                <!--<option name="useColors">1</option>-->
+                <!--<option name="useThousandSeparators">1</option>-->
+                <!--<option name="drilldown">none</option>-->
+                <!--<option name="rangeColors">["0x65a637","0xf7bc38","0xf58f39","0xd93f3c"]</option>-->
+                <!--<option name="rangeValues">[5,15,30]</option>-->
+                <!--<option name="trendInterval">auto</option>-->
+            <!--</single>-->
             <single>
                 <search>
-                    <query>| tstats count from datamodel=CbResponse.CB_Alerts where CB_Alerts.feed_name="cbbanning"
+                    <query>| tstats count from datamodel=CbResponse.CbR_Alert where CbR_Alert.feed_name="cbbanning"
                     </query>
                     <earliest>$timeframe.earliest$</earliest>
                     <latest>$timeframe.latest$</latest>
@@ -85,8 +103,8 @@
             </single>
             <single>
                 <search>
-                    <query>| tstats count from datamodel=CbResponse.CB_Alerts by CB_Alerts.cb_server
-                        | stats count(CB_Alerts.cb_server)
+                    <query>| tstats count from datamodel=CbResponse.CbR_Alert by CbR_Alert.cb_server
+                        | stats count(CbR_Alert.cb_server)
                     </query>
                     <earliest>$timeframe.earliest$</earliest>
                     <latest>$timeframe.latest$</latest>
@@ -108,8 +126,8 @@
         <chart>
             <title>Watchlist Events</title>
             <search>
-                <query>| tstats count from datamodel=CbResponse.CB_Alerts by CB_Alerts.watchlist_name | rename
-                    CB_Alerts.watchlist_name as alert | where count&gt;1
+                <query>| tstats count from datamodel=CbResponse.CbR_Alert by CbR_Alert.watchlist_name | rename
+                    CbR_Alert.watchlist_name as alert | where count&gt;1
                 </query>
                 <earliest>$timeframe.earliest$</earliest>
                 <latest>$timeframe.latest$</latest>
@@ -142,8 +160,8 @@
         <chart>
             <title>Feed Events</title>
             <search>
-                <query>| tstats count from datamodel=CbResponse.CB_Alerts by CB_Alerts.feed_name | rename
-                    CB_Alerts.feed_name as alert
+                <query>| tstats count from datamodel=CbResponse.CbR_Alert by CbR_Alert.feed_name | rename
+                    CbR_Alert.feed_name as alert
                 </query>
                 <earliest>$timeframe.earliest$</earliest>
                 <latest>$timeframe.latest$</latest>

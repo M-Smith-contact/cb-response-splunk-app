@@ -1,21 +1,107 @@
 {
     "modelName": "CbResponse",
     "displayName": "Carbon Black Enterprise Response",
-    "description": "Data model for Carbon Black Enterprise Response Alerts",
+    "description": "Data model for Carbon Black Enterprise Response",
     "objectSummary": {
         "Event-Based": 1,
         "Transaction-Based": 0,
         "Search-Based": 0
     },
     "objects": [
+//        {
+//            "objectName": "CbR_NewBinary",
+//            "displayName": "CB New Binary",
+//            "parentName": "BaseEvent",
+//            "fields": [
+//                {
+//                    "fieldName": "cb_server",
+//                    "owner": "CbR_NewBinary",
+//                    "type": "string",
+//                    "fieldSearch": "",
+//                    "required": false,
+//                    "multivalue": false,
+//                    "hidden": false,
+//                    "editable": true,
+//                    "displayName": "cb_server",
+//                    "comment": ""
+//                },
+//                {
+//                    "fieldName": "md5",
+//                    "owner": "CbR_NewBinary",
+//                    "type": "string",
+//                    "fieldSearch": "",
+//                    "required": false,
+//                    "multivalue": false,
+//                    "hidden": false,
+//                    "editable": true,
+//                    "displayName": "md5",
+//                    "comment": ""
+//                }
+//            ]
+//        },
+//        {
+//            "objectName": "CbR_NewBinary_Host",
+//            "displayName": "CB New Binary on Host",
+//            "parentName": "BaseEvent",
+//            "fields": [
+//                {
+//                    "fieldName": "cb_server",
+//                    "owner": "CbR_NewBinary_Host",
+//                    "type": "string",
+//                    "fieldSearch": "",
+//                    "required": false,
+//                    "multivalue": false,
+//                    "hidden": false,
+//                    "editable": true,
+//                    "displayName": "cb_server",
+//                    "comment": ""
+//                },
+//                {
+//                    "fieldName": "md5",
+//                    "owner": "CbR_NewBinary_Host",
+//                    "type": "string",
+//                    "fieldSearch": "",
+//                    "required": false,
+//                    "multivalue": false,
+//                    "hidden": false,
+//                    "editable": true,
+//                    "displayName": "md5",
+//                    "comment": ""
+//                },
+//                {
+//                    "fieldName": "computer_name",
+//                    "owner": "CbR_NewBinary_Host",
+//                    "type": "string",
+//                    "fieldSearch": "",
+//                    "required": false,
+//                    "multivalue": false,
+//                    "hidden": false,
+//                    "editable": true,
+//                    "displayName": "computer_name",
+//                    "comment": ""
+//                },
+//                {
+//                    "fieldName": "hostname",
+//                    "owner": "CbR_NewBinary_Host",
+//                    "type": "string",
+//                    "fieldSearch": "",
+//                    "required": false,
+//                    "multivalue": false,
+//                    "hidden": false,
+//                    "editable": true,
+//                    "displayName": "hostname",
+//                    "comment": ""
+//                },
+//            ]
+//        },
         {
-            "objectName": "CB_Alerts",
+            "objectName": "CbR_Alert",
             "displayName": "CB Alerts",
             "parentName": "BaseEvent",
             "fields": [
                 {
                     "fieldName": "cb_server",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -27,7 +113,7 @@
                 },
                 {
                     "fieldName": "child_process_guid",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -39,7 +125,7 @@
                 },
                 {
                     "fieldName": "command_line",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -51,7 +137,7 @@
                 },
                 {
                     "fieldName": "computer_name",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -63,7 +149,7 @@
                 },
                 {
                     "fieldName": "dest",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -75,7 +161,7 @@
                 },
                 {
                     "fieldName": "feed_id",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "number",
                     "fieldSearch": "",
                     "required": false,
@@ -87,7 +173,7 @@
                 },
                 {
                     "fieldName": "feed_name",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -99,7 +185,7 @@
                 },
                 {
                     "fieldName": "file_name",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -111,7 +197,7 @@
                 },
                 {
                     "fieldName": "file_path",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -123,7 +209,7 @@
                 },
                 {
                     "fieldName": "hostname",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -135,7 +221,7 @@
                 },
                 {
                     "fieldName": "ioc_type",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -147,7 +233,7 @@
                 },
                 {
                     "fieldName": "ioc_value",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -159,7 +245,7 @@
                 },
                 {
                     "fieldName": "ipv4",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -171,7 +257,7 @@
                 },
                 {
                     "fieldName": "md5",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -183,7 +269,7 @@
                 },
                 {
                     "fieldName": "parent_process_guid",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -195,7 +281,7 @@
                 },
                 {
                     "fieldName": "process_guid",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -207,7 +293,7 @@
                 },
                 {
                     "fieldName": "process_path_name",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -219,7 +305,7 @@
                 },
                 {
                     "fieldName": "registry_key",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -231,7 +317,7 @@
                 },
                 {
                     "fieldName": "registry_path",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -243,7 +329,7 @@
                 },
                 {
                     "fieldName": "registry_value",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -255,7 +341,7 @@
                 },
                 {
                     "fieldName": "severity",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -267,7 +353,7 @@
                 },
                 {
                     "fieldName": "event_type",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -279,7 +365,7 @@
                 },
                 {
                     "fieldName": "tag",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -291,7 +377,7 @@
                 },
                 {
                     "fieldName": "username",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -303,7 +389,7 @@
                 },
                 {
                     "fieldName": "domain",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -315,7 +401,7 @@
                 },
                 {
                     "fieldName": "group",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -327,7 +413,7 @@
                 },
                 {
                     "fieldName": "watchlist_name",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -339,7 +425,7 @@
                 },
                 {
                     "fieldName": "digsig_result",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -351,7 +437,7 @@
                 },
                 {
                     "fieldName": "process_name",
-                    "owner": "CB_Alerts",
+                    "owner": "CbR_Alert",
                     "type": "string",
                     "fieldSearch": "",
                     "required": false,
@@ -414,13 +500,13 @@
             "constraints": [
                 {
                     "search": "`cb` tag=alert",
-                    "owner": "CB_Alerts"
+                    "owner": "CbR_Alert"
                 }
             ],
-            "lineage": "CB_Alerts"
+            "lineage": "CbR_Alert"
         }
     ],
     "objectNameList": [
-        "CB_Alerts"
+        "CbR_Alert"
     ]
 }

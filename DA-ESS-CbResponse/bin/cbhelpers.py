@@ -57,10 +57,23 @@ class CbSearchCommand(GeneratingCommand):
         else:
             self.setup_complete = True
 
+    def process_data(self, data_dict):
+        """
+        If you want to modify the data dictionary before returning to splunk, override this. // BSJ 2016-08-30
+        """
+        return data_dict
+
+    def squash_data(self, data_dict):
+        for x in data_dict.keys():
+            v = data_dict[x]
+            data_dict[x] = str(v)
+        return data_dict
+
     def generate_result(self, data):
-        rawdata = dict((field_name, str(getattr(data, field_name, ""))) for field_name in self.field_names)
+        rawdata = dict( (field_name, getattr(data, field_name, "")) for field_name in self.field_names)
+        squashed_data = self.squash_data( self.process_data(rawdata) )
         return {'sourcetype': 'bit9:carbonblack:json', '_time': time.time(),
-                'source': self.cb.credentials.url, '_raw': rawdata}
+                'source': self.cb.credentials.url, '_raw': squashed_data}
 
     def generate(self):
         try:

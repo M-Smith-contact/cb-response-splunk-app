@@ -69,7 +69,7 @@ To prevent replication to indexers add the following stanza and variables to you
 Located at SPLUNK_HOME/etc/system/local/distsearch.conf
 
         [replicationBlacklist]
-        carbonblack = apps/carbonblack-enterprise-response/...
+        carbonblack = apps/DA-ESS-CbResponse/...
 
 http://docs.splunk.com/Documentation/ES/latest/Install/InstallTechnologyAdd-ons#Import_add-ons_with_a_different_naming_convention.
 

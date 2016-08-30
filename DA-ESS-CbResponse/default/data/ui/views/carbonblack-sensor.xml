@@ -1,10 +1,10 @@
 <form>
-    <label>Process Search</label>
+    <label>Sensor Search</label>
     <description>Enter a Carbon Black Query</description>
     <!-- Add time range picker -->
     <fieldset autoRun="false" submitButton="true">
         <!-- Add Wildcard Filter -->
-        <input type="text" token="process_search" searchWhenChanged="true">
+        <input type="text" token="sensor_search" searchWhenChanged="true">
             <label>Query</label>
         </input>
     </fieldset>
@@ -13,19 +13,11 @@
             <event>
                 <title>Results</title>
                 <search>
-                    <query>| processsearch query="$process_search$"</query>
+                    <query>| sensorsearch query="$sensor_search$"</query>
                 </search>
                 <option name="wrap">true</option>
                 <option name="rowNumbers">0</option>
                 <option name="dataOverlayMode">none</option>
-                <drilldown>
-                    <set token="guid">$click.value2$</set>
-                    <link>
-                        <![CDATA[
-                      /app/DA-ESS-CbResponse/carbonblack-process-timeline?form.proc_guid=$guid$
-                    ]]>
-                    </link>
-                </drilldown>
                 <option name="count">10</option>
                 <option name="list.drilldown">full</option>
                 <option name="list.wrap">1</option>
@@ -34,7 +26,7 @@
                 <option name="table.drilldown">all</option>
                 <option name="table.wrap">1</option>
                 <option name="type">list</option>
-                <fields>["host","source","sourcetype"]</fields>
+                <fields>["host","source","sourcetype"]</fields> <!-- TODO  what are these fiels? BSJ 2016-08-30 -->
             </event>
         </panel>
     </row>

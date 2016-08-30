@@ -27,7 +27,6 @@ def get_cbapi(splunk_service):
 
 
 class CbSearchCommand(GeneratingCommand):
-
     query = Option(name="query", require=True)
     max_result_rows = Option(name="maxresultrows", default=1000)
 

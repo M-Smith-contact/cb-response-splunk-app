@@ -58,7 +58,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     try:
-        modaction = IsolateSensorAction(sys.stdin.read(), logger, 'isolate_sensor_action')
+        modaction = IsolateSensorAction(sys.stdin.read(), logger, 'isolatesensor')
     except Exception as e:
         logger.critical(str(e))
         sys.exit(3)

@@ -1,10 +1,20 @@
 <form class="form-horizontal form-complex">
- <div class="control-group">
-   <label class="control-label" for="dest_ip">IP Of Endpoint</label>
+    <b>Tell me how to identify the endpoint to isolate</b>
+    <div class="control-group">
 
-   <div class="controls">
-     <input type="text" class="" name="action.isolatesensor.param.destip" id="destip" />
-     <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">dest ip</span>
-   </div>
- </div>
+        <div class="controls">
+            <label class="control-label" for="inputtype">Event input type</label>
+            <select name="action.isolatesensor.param.inputtype" id="inputtype">
+                <option value="ipaddress">Custom IP Address field</option>
+                <option value="cbevent">Sensor ID from Cb Response event</option>
+            </select>
+            <label class="control-label" for="ipaddress">IP Address field name</label>
+            <input type="text" class="" name="action.isolatesensor.param.ipaddress" id="ipaddress"/>
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+                IP address field from result set
+            </span>
+            <label class="control-label" for="dryrun">Dry run; do NOT isolate if checked</label>
+            <input type="checkbox" class="" name="action.isolatesensor.param.dryrun" id="dryrun"/>
+        </div>
+    </div>
 </form>

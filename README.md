@@ -73,9 +73,9 @@ Located at SPLUNK_HOME/etc/system/local/distsearch.conf
 
 http://docs.splunk.com/Documentation/ES/latest/Install/InstallTechnologyAdd-ons#Import_add-ons_with_a_different_naming_convention.
 
-### Splunk Enterprise Security Support (ES)
+### Alert Actions
 
-Because of our naming convention, it is required to modify `inputs.conf` located in `SplunkEnterpriseSEcuritySuite/local/inputs.conf` and add `|(carbon*)` to the `[app_imports_update://update_es]` stanza.
+This app contains three alert actions
 
 ## Contacting Carbon Black Support
 

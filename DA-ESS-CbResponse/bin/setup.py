@@ -19,7 +19,7 @@ import tab_splunktalib.common.util as utils
 import tab_splunktalib.common.log as log
 from tab_splunktalib.conf_manager import ta_conf_manager as ta_conf
 from tab_splunktalib.conf_manager import conf_manager as conf
-import TA_Cb_Response_consts as c
+import consts as c
 
 logger = log.Logs().get_logger("setup")
 

@@ -22,8 +22,11 @@ def get_legacy_cbapi(splunk_service):
 
 
 def get_cbapi(splunk_service):
-    cb_server, token = get_creds(splunk_service)
-    return CbEnterpriseResponseAPI(token=token, url=cb_server, ssl_verify=False)
+    if not splunk_service:
+        return CbEnterpriseResponseAPI()
+    else:
+        cb_server, token = get_creds(splunk_service)
+        return CbEnterpriseResponseAPI(token=token, url=cb_server, ssl_verify=False)
 
 
 class CbSearchCommand(GeneratingCommand):
@@ -83,3 +86,22 @@ class CbSearchCommand(GeneratingCommand):
         except Exception as e:
             yield self.error_event("error searching for {0} in Cb Response: {1}".format(self.query, str(e)))
 
+
+## Setup the logger
+def setup_logger():
+   """
+   Setup a logger for the REST handler.
+   """
+
+   logger = logging.getLogger('da-ess-cbresponse')
+   logger.setLevel(logging.DEBUG)
+
+   file_handler = logging.handlers.RotatingFileHandler(
+     make_splunkhome_path(['var', 'log', 'splunk', 'da-ess-cbresponse.log']),
+     maxBytes=25000000, backupCount=5)
+   formatter = logging.Formatter('%(asctime)s %(lineno)d %(levelname)s %(message)s')
+   file_handler.setFormatter(formatter)
+
+   logger.addHandler(file_handler)
+
+   return logger

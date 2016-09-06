@@ -15,31 +15,12 @@ sys.path.append(make_splunkhome_path(["etc", "apps", "SA-Utils", "lib"]))
 
 from cim_actions import ModularAction
 from splunklib.client import Service
-from cbhelpers import get_cbapi
+from cbhelpers import get_cbapi, setup_logger
 from cbapi.response.models import Sensor
 from time import sleep
 
 import re
 
-
-## Setup the logger
-def setup_logger():
-   """
-   Setup a logger for the REST handler.
-   """
-
-   logger = logging.getLogger('da-ess-cbresponse')
-   logger.setLevel(logging.DEBUG)
-
-   file_handler = logging.handlers.RotatingFileHandler(
-     make_splunkhome_path(['var', 'log', 'splunk', 'da-ess-cbresponse.log']),
-     maxBytes=25000000, backupCount=5)
-   formatter = logging.Formatter('%(asctime)s %(lineno)d %(levelname)s %(message)s')
-   file_handler.setFormatter(formatter)
-
-   logger.addHandler(file_handler)
-
-   return logger
 
 logger = setup_logger()
 
@@ -131,8 +112,8 @@ class IsolateSensorAction(ModularAction):
         return self.do_isolate(cb, sensor_id)
 
     def do_genericevent(self, cb, result):
-        """Attempt to isolate a sensor based on an IP address located inside the message.
-        The field containing the IP address to isolate is specified in the 'ipaddress' field in the
+        """Attempt to isolate a sensor based on an IP address or hostname located inside the message.
+        The field containing the IP address or hostname to isolate is specified in the 'ipaddress' field in the
         Alert Action UI."""
 
         # attempt to retrieve the IP address from the event
@@ -141,21 +122,22 @@ class IsolateSensorAction(ModularAction):
             self.error("No field name specified in the configuration")
             return False
 
-        sensor_ip_address = result.get(ip_field_name, None)
-        if not sensor_ip_address:
-            self.error("No value found in the result for field name {0}".format(sensor_ip_address))
+        ip_or_hostname = result.get(ip_field_name, None)
+        if not ip_or_hostname:
+            self.error("No value found in the result for field name {0}".format(ip_field_name))
             return False
 
         # at this time, Cb Response only supports IPv4 addresses. Make sure the IP address in this field
         # is a dotted quad. This simple RE just makes sure there are digits separated by dots...
-        if not IPv4_re.match(sensor_ip_address):
-            self.error("Field {0} value {1} does not look like a valid IPv4 address".format(ip_field_name, sensor_ip_address))
-            return False
+        if IPv4_re.match(ip_or_hostname):
+            field_type = "ip"
+        else:
+            field_type = "hostname"
 
         try:
             # note that we are only selecting the *first* sensor that matches. Multiple sensors may match, for a
             # variety of reasons.
-            sensor_id = cb.select(Sensor).where("ip:{}".format(sensor_ip_address)).first().id
+            sensor_id = cb.select(Sensor).where("{0}:{1}".format(field_type, ip_or_hostname)).first().id
             return self.do_isolate(cb, sensor_id)
         except Exception as e:
             self.error("Could not isolate sensor: {0}".format(str(e)))

@@ -3,6 +3,7 @@ import logging
 import json
 import gzip
 import csv
+import pprint
 
 try:
     from splunk.clilib.bundle_paths import make_splunkhome_path
@@ -62,7 +63,25 @@ class IsolateSensorAction(ModularAction):
         self.addevent(msg)
         logger.error(msg)
 
+    ## Create splunk events for action updates
+    def addevent(self, events):
+        if modaction.makeevents(  events, index='main', source='bit9:carbonblack', sourcetype='bit9:carbonblack:action'):
+            logger.info("Created splunk event for IsolateSensorAction.")
+        else:
+            logger.critical("Failed creating splunk event for IsolateSensorAction.")
+        return
+
     def do_isolate(self, cb, sensor_id):
+        dryrun = self.configuration.get("dryrun", "1")
+        try:
+            dryrun = int(dryrun)
+        except:
+            dryrun = 1
+        if dryrun == 1:
+            logger.info("Dry run: would have isolated sensor id {0}.".format(sensor_id))
+            self.addevent("Identified sensor id {0}.".format(sensor_id))
+            return True
+
         try:
             logger.info("Attempting to isolate sensor id {0} from Cb Response server {1}".format(sensor_id, cb.url))
             sensor = cb.select(Sensor, int(sensor_id))
@@ -93,9 +112,15 @@ class IsolateSensorAction(ModularAction):
         This assumes the event originated from Cb Response."""
 
         # perform some sanity checks to make sure the event is from Cb Response
-        if result.get("sourcetype") != "bit9:carbonblack:json":
+        sourcetype = result.get("sourcetype")
+        if sourcetype == "stash":
+            logger.debug("replacing 'stashed result' with the actual content of the alert/event")
+            logger.debug(result.get("orig_raw", "{}"))
+            result = json.loads(result.get("orig_raw", "{}"))
+        elif result.get("sourcetype") != "bit9:carbonblack:json":
             self.error("The original message did not originate from Cb Response (sourcetype was {0}; expected {1}".format(
                 result.get("sourcetype", "<unspecified>"), "bit9:carbonblack:json"))
+            self.error(pprint.pformat(result))
             return False
 
         sensor_id = result.get("sensor_id", None) or result.get("docs{}.sensor_id", None)

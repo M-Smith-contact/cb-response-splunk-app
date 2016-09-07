@@ -1,4 +1,4 @@
-<form script="js/drilldown_external_url.js">
+<form script="drilldown_external_url.js">
     <label>Sensor Search</label>
     <description>Enter a Carbon Black Query</description>
     <!-- Add time range picker -->

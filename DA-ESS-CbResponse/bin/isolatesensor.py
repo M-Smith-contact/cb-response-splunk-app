@@ -109,6 +109,7 @@ class IsolateSensorAction(ModularAction):
             self.error("Could not retrieve a sensor_id from the message.")
             return False
 
+        logger.info("Calling do_isolate from a Cb event with sensor id {0}.".format(sensor_id))
         return self.do_isolate(cb, sensor_id)
 
     def do_genericevent(self, cb, result):
@@ -137,7 +138,10 @@ class IsolateSensorAction(ModularAction):
         try:
             # note that we are only selecting the *first* sensor that matches. Multiple sensors may match, for a
             # variety of reasons.
+            logger.info("Looking for a sensor with {0} of {1}...".format(field_type, ip_or_hostname))
             sensor_id = cb.select(Sensor).where("{0}:{1}".format(field_type, ip_or_hostname)).first().id
+            logger.info("Found a sensor with a {0} of {1}: Calling do_isolate with sensor id {2}."
+                        .format(field_type, ip_or_hostname, sensor_id))
             return self.do_isolate(cb, sensor_id)
         except Exception as e:
             self.error("Could not isolate sensor: {0}".format(str(e)))

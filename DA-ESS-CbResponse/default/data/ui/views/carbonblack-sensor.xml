@@ -1,4 +1,4 @@
-<form>
+<form script="js/drilldown_external_url.js">
     <label>Sensor Search</label>
     <description>Enter a Carbon Black Query</description>
     <!-- Add time range picker -->
@@ -10,24 +10,17 @@
     </fieldset>
     <row>
         <panel>
-            <event>
+            <table id="table_with_webui_link">
                 <title>Results</title>
                 <search>
-                    <query>| sensorsearch query="$sensor_search$"</query>
+                    <query>| sensorsearch query="$sensor_search$" | spath | table hostname last_update os sensor_* webui_link</query>
                 </search>
-                <option name="wrap">true</option>
                 <option name="rowNumbers">0</option>
-                <option name="dataOverlayMode">none</option>
-                <option name="count">10</option>
-                <option name="list.drilldown">full</option>
-                <option name="list.wrap">1</option>
-                <option name="maxLines">5</option>
                 <option name="raw.drilldown">full</option>
                 <option name="table.drilldown">all</option>
                 <option name="table.wrap">1</option>
                 <option name="type">list</option>
-                <fields>["host","source","sourcetype"]</fields> <!-- TODO  what are these fiels? BSJ 2016-08-30 -->
-            </event>
+            </table>
         </panel>
     </row>
 </form>

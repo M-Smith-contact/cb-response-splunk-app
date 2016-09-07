@@ -5,6 +5,7 @@
         <view name="carbonblack-binary" default='false'/>
         <view name="carbonblack-process" default='false'/>
         <view name="carbonblack-process-timeline" default='false'/>
+        <view name="carbonblack-sensor" default="false"/>
     </collection>
 
 

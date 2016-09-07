@@ -41,16 +41,8 @@ class IsolateSensorAction(ModularAction):
             return self.do_genericevent(cb, result)
 
     def error(self, msg):
-        self.addevent(msg)
+        self.addevent(msg, sourcetype="bit9:carbonblack:action")
         logger.error(msg)
-
-    ## Create splunk events for action updates
-    def addevent(self, events):
-        if modaction.makeevents(  events, index='main', source='bit9:carbonblack', sourcetype='bit9:carbonblack:action'):
-            logger.info("Created splunk event for IsolateSensorAction.")
-        else:
-            logger.critical("Failed creating splunk event for IsolateSensorAction.")
-        return
 
     def do_isolate(self, cb, sensor_id):
         dryrun = self.configuration.get("dryrun", "1")
@@ -60,7 +52,7 @@ class IsolateSensorAction(ModularAction):
             dryrun = 1
         if dryrun == 1:
             logger.info("Dry run: would have isolated sensor id {0}.".format(sensor_id))
-            self.addevent("Identified sensor id {0}.".format(sensor_id))
+            self.addevent("Identified sensor id {0}.".format(sensor_id), sourcetype="bit9:carbonblack:action")
             return True
 
         try:
@@ -177,6 +169,7 @@ if __name__ == "__main__":
                 modaction.update(result)
                 modaction.invoke()
                 modaction.dowork(result)
+                modaction.writeevents(index='main', source='bit9:carbonblack')
 
     except Exception as e:
         ## adding additional logging since adhoc search invocations do not write to stderr

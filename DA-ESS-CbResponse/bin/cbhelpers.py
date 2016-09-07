@@ -5,6 +5,12 @@ from cbapi.errors import ApiError
 from splunklib.searchcommands import GeneratingCommand, Option
 import json
 import time
+import logging
+
+try:
+    from splunk.clilib.bundle_paths import make_splunkhome_path
+except ImportError:
+    from splunk.appserver.mrsparkle.lib.util import make_splunkhome_path
 
 
 def get_creds(splunk_service):

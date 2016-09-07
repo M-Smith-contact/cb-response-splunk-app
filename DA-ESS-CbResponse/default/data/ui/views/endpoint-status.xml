@@ -34,7 +34,7 @@
       <chart>
         <title>OS Distribution</title>
         <search>
-          <query>| sensorsearch query="ip:192" | spath | chart count by os</query>
+          <query>| sensorsearch | spath | search status="Online" | chart count by os</query>
           <earliest>0</earliest>
           <latest></latest>
         </search>

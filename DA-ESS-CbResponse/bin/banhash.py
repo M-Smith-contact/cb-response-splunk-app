@@ -35,16 +35,8 @@ class BanHashAction(ModularAction):
         cb = get_cbapi(self.service)
 
     def error(self, msg):
-        self.addevent(msg)
+        self.addevent(msg, sourcetype="bit9:carbonblack:action")
         logger.error(msg)
-
-    ## Create splunk events for action updates
-    def addevent(self, events):
-        if modaction.makeevents(  events, index='main', source='bit9:carbonblack', sourcetype='bit9:carbonblack:action'):
-            logger.info("Created splunk event for BanHashAction.")
-        else:
-            logger.critical("Failed creating splunk event for BanHashAction.")
-        return
 
     def do_ban(self, cb, md5sum):
         dryrun = self.configuration.get("dryrun", "1")
@@ -54,7 +46,7 @@ class BanHashAction(ModularAction):
             dryrun = 1
         if dryrun == 1:
             logger.info("Dry run: would have banned MD5 hash {0}.".format(md5sum))
-            self.addevent("Dry run banning hash {0}.".format(md5sum))
+            self.addevent("Dry run banning hash {0}.".format(md5sum), sourcetype="bit9:carbonblack:action")
             return True
 
         # check to see if this bannedHash already exists
@@ -128,6 +120,7 @@ if __name__ == "__main__":
                 modaction.update(result)
                 modaction.invoke()
                 modaction.dowork(result)
+                modaction.writeevents(index='main', source='bit9:carbonblack')
 
     except Exception as e:
         ## adding additional logging since adhoc search invocations do not write to stderr

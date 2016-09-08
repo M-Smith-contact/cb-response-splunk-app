@@ -1,0 +1,61 @@
+<form>
+  <label>Cb Response Binary Status</label>
+  <fieldset submitButton="false">
+    <input type="time" token="field1">
+      <label></label>
+      <default>
+        <earliest>0</earliest>
+        <latest></latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <table>
+        <title>Banned Process Executions by username</title>
+        <search>
+          <query>`cb` tag=alert feed_name="cbbanning" | chart count by md5 username</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="wrap">true</option>
+        <option name="rowNumbers">false</option>
+        <option name="drilldown">cell</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>New DLLs</title>
+        <search>
+          <query>`cb` notification_type="watchlist.hit.binary" watchlist_name="Newly Loaded Modules" | table docs{}.md5 docs{}.digsig_issuer docs{}.digsig_sign_time docs{}.digsig_publisher docs{}.digsig_result docs{}.original_filename docs{}.link_md5 | rename docs{}.link_md5 as webui_link</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="wrap">true</option>
+        <option name="rowNumbers">false</option>
+        <option name="drilldown">cell</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>New EXEs</title>
+        <search>
+          <query>`cb` notification_type="watchlist.hit.binary" watchlist_name="Newly Executed Applications" | table docs{}.md5 docs{}.digsig_issuer docs{}.digsig_sign_time docs{}.digsig_publisher docs{}.digsig_result docs{}.original_filename docs{}.link_md5 | rename docs{}.link_md5 as webui_link</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="wrap">undefined</option>
+        <option name="rowNumbers">undefined</option>
+        <option name="drilldown">row</option>
+      </table>
+    </panel>
+  </row>
+</form>

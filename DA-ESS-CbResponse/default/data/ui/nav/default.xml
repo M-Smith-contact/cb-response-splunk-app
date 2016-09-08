@@ -7,6 +7,8 @@
         <view name="carbonblack-process-timeline" default='false'/>
         <view name="carbonblack-sensor" default="false"/>
         <view name="endpoint-status" default="false"/>
+        <view name="network-map" default="false"/>
+        <view name="binary-status" default="false"/>
     </collection>
 
 

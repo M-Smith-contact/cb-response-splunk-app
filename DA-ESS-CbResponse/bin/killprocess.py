@@ -36,7 +36,7 @@ class KillProcessAction(ModularAction):
 
     def dowork(self, result):
         cb = get_cbapi(self.service)
-        self.do_cbevent(cb, result)
+        return self.do_cbevent(cb, result)
 
     def error(self, msg):
         self.addevent(msg, sourcetype="bit9:carbonblack:action")

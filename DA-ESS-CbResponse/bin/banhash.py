@@ -33,6 +33,7 @@ class BanHashAction(ModularAction):
 
     def dowork(self, result):
         cb = get_cbapi(self.service)
+        return self.do_genericevent(cb, result)
 
     def error(self, msg):
         self.addevent(msg, sourcetype="bit9:carbonblack:action")

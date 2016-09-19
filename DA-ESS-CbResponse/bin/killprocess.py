@@ -15,7 +15,7 @@ sys.path.append(make_splunkhome_path(["etc", "apps", "SA-Utils", "lib"]))
 
 from cim_actions import ModularAction
 from splunklib.client import Service
-from cbhelpers import get_cbapi, setup_logger
+from cbhelpers import get_cbapi
 from cbapi.response.models import Sensor
 from time import sleep
 
@@ -78,12 +78,15 @@ class KillProcessAction(ModularAction):
                 # Perform a kill process specified by the PID
                 #
                 logger.info("Guid: {0} was found on sensor".format(guid))
+                self.addevent("Guid: {0} was found on sensor".format(guid), sourcetype="bit9.carbonblack:action")
                 self.lr_session.kill_process(proc_pid)
             else:
                 #
                 # process guid was not running on sensor
                 #
                 logger.info("Guid: {0} was NOT found on sensor".format(guid))
+                self.addevent("Guid: {0} was NOT found on sensor".format(guid), sourcetype="bit9.carbonblack:action")
+
 
         return True
 
@@ -109,6 +112,7 @@ class KillProcessAction(ModularAction):
         try:
             return self.do_kill(cb, guid)
         except Exception as e:
+            #modaction.message('RESULT: ' + str(result), level=logging.ERROR)
             self.error("Could not kill guid: {0}".format(str(e)))
             logger.exception("Detailed error message")
 
@@ -121,6 +125,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     try:
+        logger = ModularAction.setup_logger('killprocess_modalert')
         logger.info("Calling KillProcessAction.__init__")
         modaction = KillProcessAction(sys.stdin.read(), logger, 'processkill')
         logger.info("Returned KillProcessAction.__init__")
@@ -130,19 +135,28 @@ if __name__ == "__main__":
 
     try:
         session_key = modaction.session_key
-        if logger.isEnabledFor(logging.DEBUG):
-            logger.debug('%s', json.dumps(modaction.settings, sort_keys=True,
-                indent=4, separators=(',', ': ')))
 
+        modaction.addinfo()
         ## process results
         with gzip.open(modaction.results_file, 'rb') as fh:
             for num, result in enumerate(csv.DictReader(fh)):
                 ## set rid to row # (0->n) if unset
-                result.setdefault('rid', num)
+                result.setdefault('rid', str(num))
+
                 modaction.update(result)
                 modaction.invoke()
-                modaction.dowork(result)
-                modaction.writeevents(index='main', source='bit9:carbonblack')
+
+                act_result = modaction.dowork(result)
+
+                modaction.addevent(str(act_result), sourcetype="bit9:carbonblack:action")
+
+                if act_result:
+                    modaction.writeevents(index='main', source='carbonblackapi')
+                    modaction.message('Successfully created splunk event', status='success', rids=modaction.rids)
+                else:
+                    modaction.writeevents(index='main', source='carbonblackapi')
+                    modaction.message('Failed to create splunk event', status='failure', rids=modaction.rids,
+                                      level=logging.ERROR)
 
     except Exception as e:
         ## adding additional logging since adhoc search invocations do not write to stderr

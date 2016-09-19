@@ -141,7 +141,7 @@ class IsolateSensorAction(ModularAction):
         except Exception as e:
             # modaction.message('Failed to create splunk event: ' + str(e), status='failure',rids=modaction.rids,level=logging.ERROR)
 
-            modaction.message('RESULT: ' + str(result), level=logging.ERROR)
+            #modaction.message('RESULT: ' + str(result), level=logging.ERROR)
             self.error("Could not isolate sensor: {0}".format(str(e)))
             logger.exception("Detailed error message")
 

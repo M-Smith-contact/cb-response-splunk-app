@@ -23,7 +23,6 @@ import re
 import struct
 
 GUID_RE = re.compile("[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{8}")
-logger = setup_logger()
 
 def parse_42_guid(guid):
     guid_parts = guid.split('-')

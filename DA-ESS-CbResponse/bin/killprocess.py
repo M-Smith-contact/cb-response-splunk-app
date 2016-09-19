@@ -36,10 +36,35 @@ class KillProcessAction(ModularAction):
 
     def dowork(self, result):
         cb = get_cbapi(self.service)
+        self.do_cbevent(cb, result)
 
     def error(self, msg):
         self.addevent(msg, sourcetype="bit9:carbonblack:action")
         logger.error(msg)
+
+    def do_cbevent(self, cb, result):
+        """Attempt to isolate a sensor based on the sensor_id located inside the message.
+        This assumes the event originated from Cb Response."""
+
+        # perform some sanity checks to make sure the event is from Cb Response
+        sourcetype = result.get("sourcetype")
+        if sourcetype == "stash":
+            logger.debug("replacing 'stashed result' with the actual content of the alert/event")
+            logger.debug(result.get("orig_raw", "{}"))
+            result = json.loads(result.get("orig_raw", "{}"))
+        elif result.get("sourcetype") != "bit9:carbonblack:json":
+            self.error("The original message did not originate from Cb Response (sourcetype was {0}; expected {1}".format(
+                result.get("sourcetype", "<unspecified>"), "bit9:carbonblack:json"))
+            self.error(pprint.pformat(result))
+            return False
+
+        guid = result.get("proc_guid", None) or result.get("docs{}.proc_guid", None)
+        if not guid:
+            self.error("Could not retrieve a proc_guid from the message.")
+            return False
+
+        logger.info("Calling do_kill from a Cb event with GUID: {0}.".format(guid))
+        return self.do_kill(cb, guid)
 
     def do_kill(self, cb, guid):
 
@@ -79,43 +104,14 @@ class KillProcessAction(ModularAction):
                 logger.info("Guid: {0} was found on sensor".format(guid))
                 self.addevent("Guid: {0} was found on sensor".format(guid), sourcetype="bit9.carbonblack:action")
                 self.lr_session.kill_process(proc_pid)
+                return True
             else:
                 #
                 # process guid was not running on sensor
                 #
                 logger.info("Guid: {0} was NOT found on sensor".format(guid))
                 self.addevent("Guid: {0} was NOT found on sensor".format(guid), sourcetype="bit9.carbonblack:action")
-
-
-        return True
-
-    def do_genericevent(self, cb, result):
-        """Attempt to ban an MD5 hash based on the field from the 'fieldname' in the Alert Action UI."""
-
-        # attempt to retrieve the MD5 hash from the event
-        field_name = self.configuration.get("fieldname")
-        if not field_name:
-            self.error("No field name specified in the configuration")
-            return False
-
-        guid = result.get(field_name, None)
-        if not guid:
-            self.error("No value found in the result for field name {0}".format(field_name))
-            return False
-
-        # at this time, Cb Response only supports IPv4 addresses. Make sure the IP address in this field
-        # is a dotted quad. This simple RE just makes sure there are digits separated by dots...
-        if not GUID_RE.match(guid):
-            self.error("Field value {0} does not look like a process guid".format(guid))
-
-        try:
-            return self.do_kill(cb, guid)
-        except Exception as e:
-            #modaction.message('RESULT: ' + str(result), level=logging.ERROR)
-            self.error("Could not kill guid: {0}".format(str(e)))
-            logger.exception("Detailed error message")
-
-        return False
+                return False
 
 
 if __name__ == "__main__":
@@ -126,7 +122,7 @@ if __name__ == "__main__":
     try:
         logger = ModularAction.setup_logger('killprocess_modalert')
         logger.info("Calling KillProcessAction.__init__")
-        modaction = KillProcessAction(sys.stdin.read(), logger, 'processkill')
+        modaction = KillProcessAction(sys.stdin.read(), logger, 'killprocess')
         logger.info("Returned KillProcessAction.__init__")
     except Exception as e:
         logger.critical(str(e))

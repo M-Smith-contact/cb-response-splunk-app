@@ -72,10 +72,12 @@ class IsolateSensorAction(ModularAction):
                 retries_left -= 1
 
             if sensor.is_isolating:
+                logger.info("Sensor id {0} successfully isolated!".format(sensor_id))
                 self.addevent("Sensor id {0} successfully isolated".format(sensor_id),
                               sourcetype="bit9:carbonblack:action")
                 return True
             else:
+                logger.info("Sensor id {0} not isolated; retries exceeded".format(sensor_id))
                 self.addevent("Sensor id {0} not isolated; retries exceeded".format(sensor_id),
                               sourcetype="bit9:carbonblack:action")
                 return False

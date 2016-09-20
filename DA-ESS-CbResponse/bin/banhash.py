@@ -3,7 +3,6 @@ import logging
 import json
 import gzip
 import csv
-import pprint
 
 try:
     from splunk.clilib.bundle_paths import make_splunkhome_path
@@ -15,15 +14,13 @@ sys.path.append(make_splunkhome_path(["etc", "apps", "SA-Utils", "lib"]))
 
 from cim_actions import ModularAction
 from splunklib.client import Service
-from cbhelpers import get_cbapi, setup_logger
-from cbapi.response.models import Binary, BannedHash
-from time import sleep
+from cbhelpers import get_cbapi
+from cbapi.response.models import BannedHash
 
 import re
 
 
 MD5SUM_RE = re.compile("[A-Fa-f0-9]{32}")
-logger = setup_logger()
 
 
 class BanHashAction(ModularAction):
@@ -55,7 +52,7 @@ class BanHashAction(ModularAction):
         if not ban:
             logger.info("Creating a new BannedHash for MD5 {0}".format(md5sum))
             new_ban = cb.create(BannedHash)
-            new_ban.md5sum = md5sum
+            new_ban.md5hash = md5sum
             new_ban.text = "Banned from Splunk"
             new_ban.enabled = True
             new_ban.save()
@@ -100,6 +97,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     try:
+        logger = ModularAction.setup_logger('banhash_modalert')
         logger.info("Calling BanHashAction.__init__")
         modaction = BanHashAction(sys.stdin.read(), logger, 'banhash')
         logger.info("Returned BanHashAction.__init__")
@@ -109,10 +107,6 @@ if __name__ == "__main__":
 
     try:
         session_key = modaction.session_key
-        if logger.isEnabledFor(logging.DEBUG):
-            logger.debug('%s', json.dumps(modaction.settings, sort_keys=True,
-                indent=4, separators=(',', ': ')))
-
         ## process results
         with gzip.open(modaction.results_file, 'rb') as fh:
             for num, result in enumerate(csv.DictReader(fh)):
@@ -120,8 +114,16 @@ if __name__ == "__main__":
                 result.setdefault('rid', num)
                 modaction.update(result)
                 modaction.invoke()
-                modaction.dowork(result)
-                modaction.writeevents(index='main', source='bit9:carbonblack')
+                act_result = modaction.dowork(result)
+                modaction.addevent(str(act_result), sourcetype="bit9:carbonblack:action")
+
+                if act_result:
+                    modaction.writeevents(index='main', source='carbonblackapi')
+                    modaction.message('Successfully created splunk event', status='success', rids=modaction.rids)
+                else:
+                    modaction.writeevents(index='main', source='carbonblackapi')
+                    modaction.message('Failed to create splunk event', status='failure', rids=modaction.rids,
+                                      level=logging.ERROR)
 
     except Exception as e:
         ## adding additional logging since adhoc search invocations do not write to stderr

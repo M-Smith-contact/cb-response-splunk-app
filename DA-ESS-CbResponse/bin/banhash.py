@@ -16,6 +16,7 @@ from cim_actions import ModularAction
 from splunklib.client import Service
 from cbhelpers import get_cbapi
 from cbapi.response.models import BannedHash
+from cbapi.errors import ServerError
 
 import re
 
@@ -48,20 +49,25 @@ class BanHashAction(ModularAction):
             return True
 
         # check to see if this bannedHash already exists
-        ban = cb.select(BannedHash).where("md5sum:{0}".format(md5sum)).first()
-        if not ban:
-            logger.info("Creating a new BannedHash for MD5 {0}".format(md5sum))
-            new_ban = cb.create(BannedHash)
-            new_ban.md5hash = md5sum
-            new_ban.text = "Banned from Splunk"
-            new_ban.enabled = True
+        logger.info("Creating a new BannedHash for MD5 {0}".format(md5sum))
+        new_ban = cb.create(BannedHash)
+        new_ban.md5hash = md5sum
+        new_ban.text = "Banned from Splunk"
+        new_ban.enabled = True
+        try:
             new_ban.save()
-            logger.info("MD5 {0} now banned".format(md5sum))
+        except ServerError as e:
+            if e.error_code == 409:
+                logger.info("BannedHash already exists for MD5 {0}".format(md5sum))
+                existing_ban = cb.select(BannedHash, md5sum)
+                existing_ban.enabled = True
+                existing_ban.save()
+                logger.info("Enabled exising BannedHash for MD5 {0}".format(md5sum))
+            else:
+                raise
         else:
-            logger.info("BannedHash already exists for MD5 {0}".format(md5sum))
-            ban.enabled = True
-            ban.save()
             logger.info("MD5 {0} now banned".format(md5sum))
+            return True
 
     def do_genericevent(self, cb, result):
         """Attempt to ban an MD5 hash based on the field from the 'fieldname' in the Alert Action UI."""
@@ -77,8 +83,6 @@ class BanHashAction(ModularAction):
             self.error("No value found in the result for field name {0}".format(field_name))
             return False
 
-        # at this time, Cb Response only supports IPv4 addresses. Make sure the IP address in this field
-        # is a dotted quad. This simple RE just makes sure there are digits separated by dots...
         if not MD5SUM_RE.match(md5sum):
             self.error("Field value {0} does not look like an md5sum".format(md5sum))
 

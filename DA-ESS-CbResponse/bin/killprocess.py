@@ -70,7 +70,7 @@ class KillProcessAction(ModularAction):
         #
         # Select the correct sensor
         #
-        sensor = self.cb.select(Sensor, sensor_id)
+        sensor = cb.select(Sensor, sensor_id)
 
         with sensor.lr_session() as self.lr_session:
             processes = self.lr_session.list_processes()

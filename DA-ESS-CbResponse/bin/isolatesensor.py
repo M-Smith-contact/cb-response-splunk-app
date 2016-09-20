@@ -86,18 +86,6 @@ class IsolateSensorAction(ModularAction):
         """Attempt to isolate a sensor based on the sensor_id located inside the message.
         This assumes the event originated from Cb Response."""
 
-        # perform some sanity checks to make sure the event is from Cb Response
-        sourcetype = result.get("sourcetype")
-        if sourcetype == "stash":
-            logger.debug("replacing 'stashed result' with the actual content of the alert/event")
-            logger.debug(result.get("orig_raw", "{}"))
-            result = json.loads(result.get("orig_raw", "{}"))
-        elif result.get("sourcetype") != "bit9:carbonblack:json":
-            self.error("The original message did not originate from Cb Response (sourcetype was {0}; expected {1}".format(
-                result.get("sourcetype", "<unspecified>"), "bit9:carbonblack:json"))
-            self.error(pprint.pformat(result))
-            return False
-
         sensor_id = result.get("sensor_id", None) or result.get("docs{}.sensor_id", None)
         if not sensor_id:
             self.error("Could not retrieve a sensor_id from the message.")

@@ -46,28 +46,15 @@ class KillProcessAction(ModularAction):
         """Attempt to isolate a sensor based on the sensor_id located inside the message.
         This assumes the event originated from Cb Response."""
 
-        # perform some sanity checks to make sure the event is from Cb Response
-        sourcetype = result.get("sourcetype")
-        if sourcetype == "stash":
-            logger.debug("replacing 'stashed result' with the actual content of the alert/event")
-            logger.debug(result.get("orig_raw", "{}"))
-            result = json.loads(result.get("orig_raw", "{}"))
-        elif result.get("sourcetype") != "bit9:carbonblack:json":
-            self.error("The original message did not originate from Cb Response (sourcetype was {0}; expected {1}".format(
-                result.get("sourcetype", "<unspecified>"), "bit9:carbonblack:json"))
-            self.error(pprint.pformat(result))
-            return False
-
-        guid = result.get("proc_guid", None) or result.get("docs{}.proc_guid", None)
+        guid = result.get("process_guid", None)
         if not guid:
-            self.error("Could not retrieve a proc_guid from the message.")
+            self.error("Could not retrieve a process GUID from the message.")
             return False
 
         logger.info("Calling do_kill from a Cb event with GUID: {0}.".format(guid))
         return self.do_kill(cb, guid)
 
     def do_kill(self, cb, guid):
-
         (sensor_id, proc_pid, proc_createtime) = parse_42_guid(guid)
 
         dryrun = self.configuration.get("dryrun", "1")

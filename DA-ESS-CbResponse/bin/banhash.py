@@ -60,6 +60,7 @@ class BanHashAction(ModularAction):
             if e.error_code == 409:
                 logger.info("BannedHash already exists for MD5 {0}".format(md5sum))
                 existing_ban = cb.select(BannedHash, md5sum)
+                existing_ban.text = "Banned from Splunk"
                 existing_ban.enabled = True
                 existing_ban.save()
                 logger.info("Enabled exising BannedHash for MD5 {0}".format(md5sum))

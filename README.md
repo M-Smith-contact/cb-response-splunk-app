@@ -108,6 +108,7 @@ using the following custom search commands.
 *   process search
 
         Example: processsearch query="process_name:cmd.exe"
+
 *   binary search
 
         Example: binarysearch query="md5=fd3cee0bbc4e55838e65911ff19ef6f5"
@@ -134,10 +135,6 @@ Located at SPLUNK_HOME/etc/system/local/distsearch.conf
         carbonblack = apps/DA-ESS-CbResponse/...
 
 http://docs.splunk.com/Documentation/ES/latest/Install/InstallTechnologyAdd-ons#Import_add-ons_with_a_different_naming_convention.
-
-### Alert Actions
-
-This app contains three alert actions
 
 ## Contacting Carbon Black Support
 

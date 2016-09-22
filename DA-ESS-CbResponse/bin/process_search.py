@@ -42,6 +42,7 @@ class ProcessSearchCommand(CbSearchCommand):
     def generate_result(self, data):
         result = super(ProcessSearchCommand, self).generate_result(data)
         result['link_process'] = data.webui_link
+        result['_time'] = data.last_update.strftime('%s')
         return result
 
 

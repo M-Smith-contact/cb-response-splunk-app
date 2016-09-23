@@ -1,4 +1,4 @@
-# Carbon Black Enterprise Response Splunk App
+# Cb Response Splunk App
 
 Current Version: 1.0.0
 
@@ -88,7 +88,7 @@ https://developer.carbonblack.com/reference/enterprise-response/authentication/.
 To setup the Splunk App:
 
 1. Navigate to the Apps Manager page.
-2. Look for the Carbon Black Enterprise Response App
+2. Look for the Cb Response App
 3. Click 'Set up'
 4. Enter your server URL in the 'CB server URL' text box. (example: https://cbserver.mycompany.com)
 5. Paste the Carbon Black API Token into the text box labelled 'API Key'.
@@ -101,7 +101,7 @@ the app and workflow actions that enable pivoting from standardized fields into 
 
 ### Process/Binary Search
 
-The main tab within the Carbon Black Enterprise Response Splunk App allows users to perform either a process or binary search
+The main tab within the Cb Response Splunk App allows users to perform either a process or binary search
 within Carbon Black.  The results will be displayed within the same screen.  Users can also use Carbon Black search features
 using the following custom search commands.
 

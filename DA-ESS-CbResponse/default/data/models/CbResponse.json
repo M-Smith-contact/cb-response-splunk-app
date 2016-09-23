@@ -1,7 +1,7 @@
 {
     "modelName": "CbResponse",
-    "displayName": "Carbon Black Enterprise Response",
-    "description": "Data model for Carbon Black Enterprise Response",
+    "displayName": "Cb Response",
+    "description": "Data model for Cb Response",
     "objectSummary": {
         "Event-Based": 1,
         "Transaction-Based": 0,

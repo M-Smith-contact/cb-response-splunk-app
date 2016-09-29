@@ -17,8 +17,6 @@ $(APPNAME).spl:
 	cp -r $(APPNAME)/static build/$(APPNAME)
 	cp LICENSE.md build/$(APPNAME)
 	cp README.md build/$(APPNAME)
-	rm -rf build/$(APPNAME)/local
-	mkdir -p build/$(APPNAME)/local
 
 	find build/$(APPNAME) -name ".*" -delete
 	find build/$(APPNAME) -name "*.pyc" -delete

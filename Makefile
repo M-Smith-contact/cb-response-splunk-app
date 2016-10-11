@@ -7,7 +7,7 @@ clean:
 	rm -f build/$(APPNAME).spl
 	rm -rf build/$(APPNAME)
 
-$(APPNAME).spl:
+$(APPNAME).spl: clean
 	mkdir -p build/$(APPNAME)
 
 	cp -r $(APPNAME)/appserver build/$(APPNAME)

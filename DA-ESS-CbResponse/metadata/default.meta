@@ -5,3 +5,12 @@ export = system
 
 [views/setup]
 export = none
+
+[alert_actions/isolatesensor]
+access = read : [ admin ], write : [ admin ]
+
+[alert_actions/banhash]
+access = read : [ admin ], write : [ admin ]
+
+[alert_actions/killprocess]
+access = read : [ admin ], write : [ admin ]

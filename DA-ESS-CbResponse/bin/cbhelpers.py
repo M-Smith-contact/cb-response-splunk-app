@@ -92,7 +92,8 @@ class CbSearchCommand(GeneratingCommand):
                 query = query.where(self.query)
 
             if self.respect_timebox:
-                pass
+                search_results = self.search_results_info
+                self.logger.debug('search time: %s %s' % (str(search_results.search_et), str(search_results.search_lt)))
 
             for result in query[:self.max_result_rows]:
                 self.logger.info("yielding {0} {1}".format(self.search_cls.__name__, result._model_unique_id))

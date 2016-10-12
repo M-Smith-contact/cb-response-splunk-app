@@ -15,6 +15,7 @@ $(APPNAME).spl: clean
 	cp -r $(APPNAME)/default build/$(APPNAME)
 	cp -r $(APPNAME)/metadata build/$(APPNAME)
 	cp -r $(APPNAME)/static build/$(APPNAME)
+	cp -r $(APPNAME)/README build/$(APPNAME)
 	cp LICENSE.md build/$(APPNAME)
 	cp README.md build/$(APPNAME)
 

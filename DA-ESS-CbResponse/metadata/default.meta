@@ -3,9 +3,6 @@
 access = read : [ * ], write : [ admin ]
 export = system
 
-[views/setup]
-export = none
-
 [alert_actions/isolatesensor]
 access = read : [ admin ], write : [ admin ]
 

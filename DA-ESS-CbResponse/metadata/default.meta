@@ -11,3 +11,6 @@ access = read : [ admin ], write : [ admin ]
 
 [alert_actions/killprocess]
 access = read : [ admin ], write : [ admin ]
+
+[views/setup]
+export = none

@@ -2,7 +2,7 @@ from cbapi import CbApi
 from cbapi.response import CbEnterpriseResponseAPI
 from cbapi.errors import ApiError
 
-from splunklib.searchcommands import GeneratingCommand, Option
+from splunklib.searchcommands import GeneratingCommand, Option, Configuration
 import json
 import time
 import logging
@@ -35,6 +35,7 @@ def get_cbapi(splunk_service):
         return CbEnterpriseResponseAPI(token=token, url=cb_server, ssl_verify=False)
 
 
+@Configuration(distributed=False)
 class CbSearchCommand(GeneratingCommand):
     query = Option(name="query", require=False)
     max_result_rows = Option(name="maxresultrows", default=1000)

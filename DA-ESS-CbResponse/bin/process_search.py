@@ -7,7 +7,7 @@ import logging
 log = logging.getLogger(__name__)
 
 
-@Configuration()
+@Configuration(distributed=False)
 class ProcessSearchCommand(CbSearchCommand):
     field_names = ['cmdline',
                    'comms_ip',

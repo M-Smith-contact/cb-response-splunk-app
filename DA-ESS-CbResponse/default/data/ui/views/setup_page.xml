@@ -1,0 +1,10 @@
+<dashboard script="setup.js" stylesheet="setup.css" hideAppBar="true" hideEdit="true" isDashboard="false">
+  <label>DA-ESS-CbResponse</label>
+  <row>
+    <panel>
+      <html>
+        <div id="setup_page_container"/>
+      </html>
+    </panel>
+  </row>
+</dashboard>

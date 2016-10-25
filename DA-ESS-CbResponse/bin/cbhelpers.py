@@ -2,7 +2,7 @@ from cbapi import CbApi
 from cbapi.response import CbEnterpriseResponseAPI
 from cbapi.errors import ApiError
 
-from splunklib.searchcommands import GeneratingCommand, Option
+from splunklib.searchcommands import GeneratingCommand, Option, Configuration
 import json
 import time
 import logging
@@ -89,7 +89,7 @@ class CbSearchCommand(GeneratingCommand):
             if self.query:
                 query = query.where(self.query)
 
-            for result in query[:self.max_result_rows]:
+            for result in query[:int(self.max_result_rows)]:
                 self.logger.info("yielding {0} {1}".format(self.search_cls.__name__, result._model_unique_id))
                 yield self.generate_result(result)
 

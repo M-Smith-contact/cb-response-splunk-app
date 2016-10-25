@@ -7,7 +7,7 @@ import logging
 log = logging.getLogger(__name__)
 
 
-@Configuration()
+@Configuration(distributed=False)
 class SensorSearchCommand(CbSearchCommand):
     field_names = [
                     'build_version_string',

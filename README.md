@@ -1,6 +1,6 @@
 # Cb Response Splunk App
 
-Current Version: 2.0.2
+Current Version: 2.0.3
 
 The Carbon Black App for Splunk allows administrators to leverage the industry's leading EDR solution to see, 
 detect and take action upon endpoint activity from directly within Splunk.

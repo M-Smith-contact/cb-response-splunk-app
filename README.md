@@ -1,6 +1,6 @@
 # Cb Response Splunk App
 
-Current Version: 2.0.1
+Current Version: 2.0.2
 
 The Carbon Black App for Splunk allows administrators to leverage the industry's leading EDR solution to see, 
 detect and take action upon endpoint activity from directly within Splunk.
@@ -40,6 +40,9 @@ https://developer.carbonblack.com/reference/enterprise-response/authentication/.
 6.	Click Save to save the new configuration.
 
 The Cb Response app for Splunk uses Splunk’s encrypted credential storage facility to store the API token for your Cb Response server, so the API key is stored securely on the Splunk server.
+
+If for any reason you have to change the API key or Cb server URL after the Splunk app has been set up once, visit the setup page
+by going to `https://<SPLUNK_SERVER>/en-US/app/DA-ESS-CbResponse/setup_page`.
 
 ### Splunk Distributed Environment Configuration
 

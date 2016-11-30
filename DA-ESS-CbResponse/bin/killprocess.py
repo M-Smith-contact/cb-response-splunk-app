@@ -123,7 +123,7 @@ if __name__ == "__main__":
         ## process results
         if not os.path.exists(modaction.results_file):
             logger.info("No results available to process: %s does not exist, exiting." % modaction.results_file)
-            modaction.message("No results available to process", status="success", rids=modaction.rids)
+            sys.exit(0)
         with gzip.open(modaction.results_file, 'rb') as fh:
             for num, result in enumerate(csv.DictReader(fh)):
                 ## set rid to row # (0->n) if unset

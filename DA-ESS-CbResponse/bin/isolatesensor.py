@@ -4,6 +4,7 @@ import json
 import gzip
 import csv
 import pprint
+import os
 
 try:
     from splunk.clilib.bundle_paths import make_splunkhome_path
@@ -152,24 +153,28 @@ if __name__ == "__main__":
 
     try:
         session_key = modaction.session_key
-        ## process results
+
         modaction.addinfo()
+        ## process results
+        if not os.path.exists(modaction.results_file):
+            logger.info("No results available to process: %s does not exist, exiting." % modaction.results_file)
+            modaction.message("No results available to process", status="success", rids=modaction.rids)
         with gzip.open(modaction.results_file, 'rb') as fh:
             for num, result in enumerate(csv.DictReader(fh)):
                 ## set rid to row # (0->n) if unset
                 result.setdefault('rid', str(num))
+
                 modaction.update(result)
                 modaction.invoke()
+
                 act_result = modaction.dowork(result)
-                modaction.addevent(str(act_result), sourcetype="bit9:carbonblack:action")
 
                 if act_result:
-                    modaction.writeevents(index='main', source='carbonblackapi')
-                    modaction.message('Successfully created splunk event', status='success', rids=modaction.rids)
+                    modaction.message('Successfully isolated sensor', status='success')
                 else:
-                    modaction.writeevents(index='main', source='carbonblackapi')
-                    modaction.message('Failed to create splunk event', status='failure', rids=modaction.rids,
-                                      level=logging.ERROR)
+                    modaction.message('Failed to isolate sensor', status='failure', level=logging.ERROR)
+
+                modaction.writeevents(source='carbonblackapi')
 
     except Exception as e:
         ## adding additional logging since adhoc search invocations do not write to stderr

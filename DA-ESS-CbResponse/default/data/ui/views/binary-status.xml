@@ -4,7 +4,7 @@
     <input type="time" token="field1">
       <label></label>
       <default>
-        <earliest>0</earliest>
+        <earliest>-24h@h<</earliest>
         <latest></latest>
       </default>
     </input>
@@ -32,7 +32,7 @@
         <title>New DLLs</title>
         <search>
           <query>`cb` notification_type="watchlist.hit.binary" watchlist_name="Newly Loaded Modules" | table docs{}.md5 docs{}.digsig_issuer docs{}.digsig_sign_time docs{}.digsig_publisher docs{}.digsig_result docs{}.original_filename docs{}.link_md5 | rename docs{}.link_md5 as webui_link</query>
-          <earliest>0</earliest>
+          <earliest>-24h@h<</earliest>
           <latest></latest>
         </search>
         <option name="wrap">true</option>

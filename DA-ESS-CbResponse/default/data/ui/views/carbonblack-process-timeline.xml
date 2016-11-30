@@ -17,7 +17,7 @@
         <panel>
             <chart>
                 <search>
-                    <query>index="carbonblack" process_guid="$proc_guid$" | timechart span=30m count by type</query>
+                    <query>`cb` process_guid="$proc_guid$" | timechart span=30m count by type</query>
                     <earliest>$timepicker.earliest$</earliest>
                     <latest>$timepicker.latest$</latest>
                 </search>
@@ -71,7 +71,7 @@
         <event id="detail" depends="$etype$">
             <title>Event Type: $etype$</title>
             <search>
-                <query>index="carbonblack" process_guid="$proc_guid$" type="$etype$"</query>
+                <query>`cb` process_guid="$proc_guid$" type="$etype$"</query>
                 <earliest>$timepicker.earliest$</earliest>
                 <latest>$timepicker.latest$</latest>
             </search>

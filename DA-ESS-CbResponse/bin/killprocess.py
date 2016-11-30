@@ -1,3 +1,4 @@
+import os
 import sys
 import logging
 import json
@@ -120,6 +121,9 @@ if __name__ == "__main__":
 
         modaction.addinfo()
         ## process results
+        if not os.path.exists(modaction.results_file):
+            logger.info("No results available to process: %s does not exist, exiting." % modaction.results_file)
+            modaction.message("No results available to process", status="success", rids=modaction.rids)
         with gzip.open(modaction.results_file, 'rb') as fh:
             for num, result in enumerate(csv.DictReader(fh)):
                 ## set rid to row # (0->n) if unset
@@ -130,15 +134,12 @@ if __name__ == "__main__":
 
                 act_result = modaction.dowork(result)
 
-                modaction.addevent(str(act_result), sourcetype="bit9:carbonblack:action")
-
                 if act_result:
-                    modaction.writeevents(index='main', source='carbonblackapi')
-                    modaction.message('Successfully created splunk event', status='success', rids=modaction.rids)
+                    modaction.message('Successfully killed process', status='success')
                 else:
-                    modaction.writeevents(index='main', source='carbonblackapi')
-                    modaction.message('Failed to create splunk event', status='failure', rids=modaction.rids,
-                                      level=logging.ERROR)
+                    modaction.message('Failed to kill process', status='failure', level=logging.ERROR)
+
+                modaction.writeevents(source='carbonblackapi')
 
     except Exception as e:
         ## adding additional logging since adhoc search invocations do not write to stderr
